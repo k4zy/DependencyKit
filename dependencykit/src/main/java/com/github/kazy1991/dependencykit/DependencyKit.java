@@ -60,6 +60,6 @@ public class DependencyKit {
                 }
             }
         }
-        throw new IllegalStateException("Cound not find @Inject constructor");
+        throw new IllegalStateException("Could not find @Inject constructor");
     }
 }
