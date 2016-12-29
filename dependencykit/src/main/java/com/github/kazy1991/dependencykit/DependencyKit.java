@@ -20,7 +20,6 @@ public class DependencyKit {
         }
     }
 
-    @SuppressWarnings("Since15")
     public static void inject(Object instance) {
         final Field[] fields = instance.getClass().getDeclaredFields();
         for (Field field : fields) {
