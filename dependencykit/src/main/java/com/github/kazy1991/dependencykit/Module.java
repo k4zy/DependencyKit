@@ -10,6 +10,8 @@ public abstract class Module {
 
     private Map<Class, Object> bindingInstanceMap = new HashMap<>();
 
+    private Map<Class, Lazy> bindingLazyMap = new HashMap<>();
+
     public Module() {
         configure();
     }
@@ -20,6 +22,10 @@ public abstract class Module {
 
     public Map<Class, Object> getBindingInstanceMap() {
         return bindingInstanceMap;
+    }
+
+    public Map<Class, Lazy> getBindingLazyMap() {
+        return bindingLazyMap;
     }
 
     abstract protected void configure();
@@ -42,6 +48,10 @@ public abstract class Module {
 
         public void to(Object instance) {
             bindingInstanceMap.put(from, instance);
+        }
+
+        public void to(Lazy lazy) {
+            bindingLazyMap.put(from, lazy);
         }
 
     }

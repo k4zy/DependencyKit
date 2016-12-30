@@ -14,11 +14,13 @@ public class DependencyKit {
 
     private static Map<Class, Class> rootBindingMap = new HashMap<>();
     private static Map<Class, Object> rootBindingInstanceMap = new HashMap<>();
+    private static Map<Class, Lazy> rootBindingLazyMap = new HashMap<>();
 
     public static void configure(Module... modules) {
         for (Module module : modules) {
-            DependencyKit.rootBindingMap.putAll(module.getBindingMap());
-            DependencyKit.rootBindingInstanceMap.putAll(module.getBindingInstanceMap());
+            rootBindingMap.putAll(module.getBindingMap());
+            rootBindingInstanceMap.putAll(module.getBindingInstanceMap());
+            rootBindingLazyMap.putAll(module.getBindingLazyMap());
         }
     }
 
@@ -50,13 +52,13 @@ public class DependencyKit {
             return getFromClass(type);
         } else if (rootBindingInstanceMap.containsKey(type)) {
             return getFromInstance(type);
+        } else if (rootBindingLazyMap.containsKey(type)) {
+            Object object = getFromLazy(type);
+            rootBindingInstanceMap.put(type, object); // behave as Singleton but global polluted..
+            return object;
         } else {
             throw new IllegalStateException("Could not find binding rule");
         }
-    }
-
-    private static Object getFromInstance(Class<?> type) {
-        return rootBindingInstanceMap.get(type);
     }
 
     @SuppressWarnings("TryWithIdenticalCatches")
@@ -76,6 +78,14 @@ public class DependencyKit {
             }
         }
         throw new IllegalStateException("Could not find @Inject constructor");
+    }
+
+    private static Object getFromInstance(Class<?> type) {
+        return rootBindingInstanceMap.get(type);
+    }
+
+    private static Object getFromLazy(Class<?> type) {
+        return rootBindingLazyMap.get(type).get();
     }
 
     private static Object[] getParams(Constructor constructor) {
