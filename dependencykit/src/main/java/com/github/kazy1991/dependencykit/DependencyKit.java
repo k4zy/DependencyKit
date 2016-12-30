@@ -13,10 +13,12 @@ import javax.inject.Inject;
 public class DependencyKit {
 
     private static Map<Class, Class> rootBindingMap = new HashMap<>();
+    private static Map<Class, Object> rootBindingInstanceMap = new HashMap<>();
 
     public static void configure(Module... modules) {
         for (Module module : modules) {
             DependencyKit.rootBindingMap.putAll(module.getBindingMap());
+            DependencyKit.rootBindingInstanceMap.putAll(module.getBindingInstanceMap());
         }
     }
 
@@ -43,8 +45,22 @@ public class DependencyKit {
         return false;
     }
 
-    @SuppressWarnings("TryWithIdenticalCatches")
     private static Object get(Class<?> type) {
+        if (rootBindingMap.containsKey(type)) {
+            return getFromClass(type);
+        } else if (rootBindingInstanceMap.containsKey(type)) {
+            return getFromInstance(type);
+        } else {
+            throw new IllegalStateException("Could not find binding rule");
+        }
+    }
+
+    private static Object getFromInstance(Class<?> type) {
+        return rootBindingInstanceMap.get(type);
+    }
+
+    @SuppressWarnings("TryWithIdenticalCatches")
+    private static Object getFromClass(Class<?> type) {
         Class<?> implType = rootBindingMap.get(type);
         for (Constructor constructor : implType.getDeclaredConstructors()) {
             if (hasTargetAnnotation(constructor.getDeclaredAnnotations(), Inject.class)) {

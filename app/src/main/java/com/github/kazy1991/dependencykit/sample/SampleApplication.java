@@ -9,6 +9,6 @@ public class SampleApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        DependencyKit.configure(new SampleModule());
+        DependencyKit.configure(new SampleModule(this));
     }
 }
