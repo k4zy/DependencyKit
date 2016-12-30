@@ -64,9 +64,8 @@ public class DependencyKit {
         Class<?> implType = rootBindingMap.get(type);
         for (Constructor constructor : implType.getDeclaredConstructors()) {
             if (hasTargetAnnotation(constructor.getDeclaredAnnotations(), Inject.class)) {
-                Object[] args = new Object[0];
                 try {
-                    return constructor.newInstance(args);
+                    return constructor.newInstance(getParams(constructor));
                 } catch (InstantiationException e) {
                     throw new IllegalStateException("Could not create instance");
                 } catch (IllegalAccessException e) {
@@ -77,5 +76,14 @@ public class DependencyKit {
             }
         }
         throw new IllegalStateException("Could not find @Inject constructor");
+    }
+
+    private static Object[] getParams(Constructor constructor) {
+        Class[] paramTypes = constructor.getParameterTypes();
+        Object[] params = new Object[paramTypes.length];
+        for (int i = 0; i < paramTypes.length; i++) {
+            params[i] = get(paramTypes[i]);
+        }
+        return params;
     }
 }
