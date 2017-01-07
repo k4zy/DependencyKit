@@ -12,10 +12,6 @@ public abstract class Module {
 
     private Map<Class, Lazy> bindingLazyMap = new HashMap<>();
 
-    public Module() {
-        configure();
-    }
-
     public Map<Class, Class> getBindingMap() {
         return bindingMap;
     }
