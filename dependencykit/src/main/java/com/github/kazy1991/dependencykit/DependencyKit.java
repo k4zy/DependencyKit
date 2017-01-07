@@ -18,6 +18,7 @@ public class DependencyKit {
 
     public static void configure(Module... modules) {
         for (Module module : modules) {
+            module.configure();
             rootBindingMap.putAll(module.getBindingMap());
             rootBindingInstanceMap.putAll(module.getBindingInstanceMap());
             rootBindingLazyMap.putAll(module.getBindingLazyMap());
