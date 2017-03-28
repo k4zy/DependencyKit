@@ -3,7 +3,7 @@ build:
     id: gcr.io/android-container-build/github-kazy1991-wercker-container-android
     username: _json_key
     password: $GCR_JSON_KEY_FILE
-    registry: https:gcr.io
+    registry: gcr.io
     tag: f1f163ff26d8a838f508914f50e1273659641602
   steps:
     - script:
