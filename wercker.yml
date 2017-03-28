@@ -4,7 +4,7 @@ build:
     username: _json_key
     password: $GCR_JSON_KEY_FILE
     registry: gcr.io
-    tag: f1f163ff26d8a838f508914f50e1273659641602
+    tag: 80419ac44ac6f4598546b0cffd77a643cbe72d96
   steps:
     - script:
         name: run gradle assembleDebug
