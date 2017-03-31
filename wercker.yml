@@ -14,3 +14,7 @@ build:
         name: run codecov
         code: |
           bash <(curl -s https://codecov.io/bash)
+    - script:
+        name: build sample app
+        code: |
+          ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR app:assembleDebug -PdisablePreDex
