@@ -12,47 +12,8 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 
 @RunWith(Enclosed.class)
 public class DependencyKitTest {
-
-    private interface SmartPhone {
-
-        String developer();
-
-        String os();
-
-        int storageSize();
-
-        long weight();
-    }
-
-    public static class Pixel implements SmartPhone {
-
-        @Inject
-        public Pixel() {
-        }
-
-        @Override
-        public String developer() {
-            return "Google";
-        }
-
-        @Override
-        public String os() {
-            return "Android";
-        }
-
-        @Override
-        public int storageSize() {
-            return 64;
-        }
-
-        @Override
-        public long weight() {
-            return 300;
-        }
-    }
-
+   
     public static class ValidCondition {
-
         @Inject
         SmartPhone smartPhone;
 
