@@ -7,7 +7,10 @@ build:
     tag: 80419ac44ac6f4598546b0cffd77a643cbe72d96
   steps:
     - script:
-        name: run gradle assembleDebug
+        name: run test
         code: |
-          ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR assembleDebug -PdisablePreDex
-
+          ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR dependencykit:jacoco -PdisablePreDex
+    - script:
+        name: run codecov
+        code: |
+          bash <(curl -s https://codecov.io/bash)
