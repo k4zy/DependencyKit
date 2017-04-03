@@ -1,4 +1,4 @@
-package com.github.kazy1991.dependencykit;
+package com.github.kazy1991.dependencykit.sample;
 
 import javax.inject.Inject;
 

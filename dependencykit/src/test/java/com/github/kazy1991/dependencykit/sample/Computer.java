@@ -1,7 +1,6 @@
-package com.github.kazy1991.dependencykit;
+package com.github.kazy1991.dependencykit.sample;
 
-
-public interface SmartPhone {
+public interface Computer {
 
     String developer();
 
