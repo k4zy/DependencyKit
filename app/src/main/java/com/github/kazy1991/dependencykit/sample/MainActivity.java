@@ -21,7 +21,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final TextView textView = (TextView) findViewById(R.id.text_view);
-        DependencyKit.inject(this);
+        DependencyKit dependencyKit = SampleApplication.dependencyKit(this);
+        dependencyKit.inject(this);
 
         countDownRepository.fetch()
                 .subscribeOn(Schedulers.io())

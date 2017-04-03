@@ -12,11 +12,11 @@ import javax.inject.Inject;
 
 public class DependencyKit {
 
-    private static Map<Class, Class> rootBindingMap = new HashMap<>();
-    private static Map<Class, Object> rootBindingInstanceMap = new HashMap<>();
-    private static Map<Class, Lazy> rootBindingLazyMap = new HashMap<>();
+    private Map<Class, Class> rootBindingMap = new HashMap<>();
+    private Map<Class, Object> rootBindingInstanceMap = new HashMap<>();
+    private Map<Class, Lazy> rootBindingLazyMap = new HashMap<>();
 
-    public static void configure(Module... modules) {
+    public void configure(Module... modules) {
         for (Module module : modules) {
             module.configure();
             rootBindingMap.putAll(module.getBindingMap());
@@ -25,7 +25,7 @@ public class DependencyKit {
         }
     }
 
-    public static void inject(Object instance) {
+    public void inject(Object instance) {
         final Field[] fields = instance.getClass().getDeclaredFields();
         for (Field field : fields) {
             if (hasTargetAnnotation(field.getDeclaredAnnotations(), Inject.class)) {
@@ -39,7 +39,7 @@ public class DependencyKit {
         }
     }
 
-    private static boolean hasTargetAnnotation(Annotation[] annotations, Class<? extends Annotation> target) {
+    private boolean hasTargetAnnotation(Annotation[] annotations, Class<? extends Annotation> target) {
         for (Annotation annotation : annotations) {
             if (annotation.annotationType().equals(target)) {
                 return true;
@@ -48,7 +48,7 @@ public class DependencyKit {
         return false;
     }
 
-    private static Object get(Class<?> type) {
+    private Object get(Class<?> type) {
         if (rootBindingMap.containsKey(type)) {
             return getFromClass(type);
         } else if (rootBindingInstanceMap.containsKey(type)) {
@@ -63,7 +63,7 @@ public class DependencyKit {
     }
 
     @SuppressWarnings("TryWithIdenticalCatches")
-    private static Object getFromClass(Class<?> type) {
+    private Object getFromClass(Class<?> type) {
         Class<?> implType = rootBindingMap.get(type);
         for (Constructor constructor : implType.getDeclaredConstructors()) {
             if (hasTargetAnnotation(constructor.getDeclaredAnnotations(), Inject.class)) {
@@ -81,15 +81,15 @@ public class DependencyKit {
         throw new IllegalStateException("Could not find @Inject constructor");
     }
 
-    private static Object getFromInstance(Class<?> type) {
+    private Object getFromInstance(Class<?> type) {
         return rootBindingInstanceMap.get(type);
     }
 
-    private static Object getFromLazy(Class<?> type) {
+    private Object getFromLazy(Class<?> type) {
         return rootBindingLazyMap.get(type).get();
     }
 
-    private static Object[] getParams(Constructor constructor) {
+    private Object[] getParams(Constructor constructor) {
         Class[] paramTypes = constructor.getParameterTypes();
         Object[] params = new Object[paramTypes.length];
         for (int i = 0; i < paramTypes.length; i++) {
